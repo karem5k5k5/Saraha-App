@@ -1,0 +1,422 @@
+{
+	"info": {
+		"_postman_id": "b0a40dda-146a-4927-a199-a8bab8d0daef",
+		"name": "saraha-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "41531190"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\":\"Kareem Mohamed\",\r\n    \"email\":\"karem5k5k5@gmail.com\",\r\n    \"password\":\"123456\",\r\n    // \"phoneNumber\":\"123\",\r\n    \"dob\":\"1998-08-11\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "verify account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\":68303,\r\n    \"email\":\"karem5k5k5@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/verify-account"
+					},
+					"response": []
+				},
+				{
+					"name": "re-send OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karem5k5k5@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/resend-otp"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let response = pm.response.json()\r",
+									"pm.environment.set(\"token\",response.accessToken)\r",
+									"pm.environment.set(\"refreshToken\",response.refreshToken)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karem5k5k5@gmail.com\",\r\n    \"password\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "reset password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"karem5k5k5@gmail.com\",\r\n    \"otp\":\"37743\",\r\n    \"newPassword\":\"123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth/reset-password"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/auth/logout"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "get user by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"fr123@gmail.com\",\r\n    \"fullName\":\"franck joe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/user"
+					},
+					"response": []
+				},
+				{
+					"name": "upload profile picture - local",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profilePic",
+									"type": "file",
+									"src": "postman-cloud:///1f072c23-5d50-4460-8e26-39a18706d8db"
+								}
+							]
+						},
+						"url": "{{url}}/user/upload-profile-picture"
+					},
+					"response": []
+				},
+				{
+					"name": "upload profile picture - cloud",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profilePic",
+									"type": "file",
+									"src": "postman-cloud:///1f072c22-2a6b-4d20-97f3-63f907aedc2b"
+								}
+							]
+						},
+						"url": "{{url}}/user/upload-profile-picture-cloud"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": "send message",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "Hello World",
+									"type": "text"
+								},
+								{
+									"key": "attachments",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1f072c22-a78f-4f40-b9ee-95393fb8c924",
+										"postman-cloud:///1f072c23-5d50-4460-8e26-39a18706d8db",
+										"postman-cloud:///1f072c22-2a6b-4d20-97f3-63f907aedc2b"
+									]
+								}
+							]
+						},
+						"url": "{{url}}/message/68a5c6f389d4c75ebdbf2501"
+					},
+					"response": []
+				},
+				{
+					"name": "send message - not anonymous",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "Hello World",
+									"type": "text"
+								},
+								{
+									"key": "attachments",
+									"type": "file",
+									"src": [
+										"postman-cloud:///1f072c22-a78f-4f40-b9ee-95393fb8c924",
+										"postman-cloud:///1f072c23-5d50-4460-8e26-39a18706d8db",
+										"postman-cloud:///1f072c22-2a6b-4d20-97f3-63f907aedc2b"
+									]
+								}
+							]
+						},
+						"url": "{{url}}/message/68a5c6f389d4c75ebdbf2501/sender"
+					},
+					"response": []
+				},
+				{
+					"name": "get message",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/message/68a89e1c4332c1621f8e9bf8"
+					},
+					"response": []
+				},
+				{
+					"name": "delete message",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "refreshtoken",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": "{{url}}/message/68a898dfe7e9b0138e4aefea"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"let response = pm.response.json()\r",
+					"if (response.message == \"refresh token successfully\") {\r",
+					"    pm.environment.set(\"token\", response.accessToken)\r",
+					"    pm.environment.set(\"refreshToken\", response.refreshToken)\r",
+					"}"
+				]
+			}
+		}
+	]
+}
