@@ -1,6 +1,6 @@
 import User from './../../DB/models/user.model.js';
 import fs from 'node:fs';
-import { deleteImage, deleteUserFolder, uploadFile } from '../../utils/cloud/cloudinary.js';
+import { deleteImage, uploadFile } from '../../utils/cloud/cloudinary.js';
 
 // get user by id
 export const getUserById = async (req, res) => {
@@ -9,7 +9,7 @@ export const getUserById = async (req, res) => {
     // hide password
     user.password = undefined
     //send response 
-    return res.status(201).json({ success: true, user })
+    return res.status(200).json({ success: true, user })
 
 }
 
@@ -67,7 +67,7 @@ export const deleteUser = async (req, res) => {
     user.deletedAt = Date.now()
     await user.save()
     // send response
-    return res.status(201).json({ success: true, message: "User deleted Successfully" })
+    return res.status(200).json({ success: true, message: "User deleted Successfully" })
 
 }
 
@@ -82,7 +82,7 @@ export const uploadProfilePicture = async (req, res) => {
     // update user
     await User.findByIdAndUpdate({ _id: user._id }, { profilePicture: req.file.path })
     // send response
-    return res.status(201).json({ success: true, message: "User's profile picture uploaded Successfully" })
+    return res.status(200).json({ success: true, message: "User's profile picture uploaded Successfully" })
 }
 
 //upload profile picture - cloud
@@ -98,5 +98,5 @@ export const uploadProfilePictureCloud = async (req, res) => {
     // update user
     await User.updateOne({ _id: user._id }, { cloudProfilePicture: { secure_url, public_id } })
     // send response
-    return res.status(201).json({ success: true, message: "User's profile picture uploaded Successfully", data: { secure_url, public_id } })
+    return res.status(200).json({ success: true, message: "User's profile picture uploaded Successfully", data: { secure_url, public_id } })
 }

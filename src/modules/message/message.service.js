@@ -34,7 +34,7 @@ export const getMessage = async (req, res) => {
         throw new Error("Message not found", { cause: 404 })
     }
     // send reponse
-    return res.status(201).json({ success: true, message })
+    return res.status(200).json({ success: true, message })
 }
 
 export const deleteMessage = async (req, res) => {
@@ -48,5 +48,5 @@ export const deleteMessage = async (req, res) => {
         throw new Error("Message not found", { cause: 404 })
     }
     // send reponse
-    return res.status(201).json({ success: true, message: "Message deleted successfully" })
+    return res.status(200).json({ success: true, message: "Message deleted successfully" })
 }

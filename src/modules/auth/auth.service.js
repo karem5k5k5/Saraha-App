@@ -72,7 +72,7 @@ export const verifyAccount = async (req, res) => {
 
     // fail case
     if (!user) {
-        throw new Error("Invalid OTP", { cause: 401 })
+        throw new Error("Invalid OTP", { cause: 403 })
     }
 
     //success case
@@ -84,7 +84,7 @@ export const verifyAccount = async (req, res) => {
     // save user to db
     await user.save()
     // send response
-    return res.status(201).json({ success: true, message: "Account verified successfully" })
+    return res.status(200).json({ success: true, message: "Account verified successfully" })
 
 }
 
@@ -106,7 +106,7 @@ export const resendOTP = async (req, res) => {
         html: `<p>your new otp to verify account is ${otp}</p>`
     })
     // send response
-    return res.status(201).json({ success: true, message: "OTP sent successfully" })
+    return res.status(200).json({ success: true, message: "OTP sent successfully" })
 
 }
 
@@ -133,7 +133,7 @@ export const googleLogin = async (req, res) => {
     const token = generateToken(user._id)
 
     //send response
-    return res.status(201).json({ success: true, message: "User logged in successfully", data: { user, token } })
+    return res.status(200).json({ success: true, message: "User logged in successfully", data: { user, token } })
 
 }
 
@@ -159,16 +159,16 @@ export const login = async (req, res) => {
         }]
     })
     if (!user) {
-        throw new Error("Invalid Credentials", { cause: 401 })
+        throw new Error("Invalid Credentials", { cause: 403 })
     }
     // check password
-    const isMatch = verifyPassword(password, user.password)
+    const isMatch = await verifyPassword(password, user.password)
     if (!isMatch) {
-        throw new Error("Invalid Credentials", { cause: 401 })
+        throw new Error("Invalid Credentials", { cause: 403 })
     }
     // check user verification
     if (!user.isVerified) {
-        throw new Error("PLease verify your account", { cause: 401 })
+        throw new Error("PLease verify your account", { cause: 403 })
     }
     // generate token
     const accessToken = generateToken(user._id, { expiresIn: "1h" })
@@ -176,7 +176,7 @@ export const login = async (req, res) => {
     // store refreshToken into DB
     await Token.create({ token: refreshToken, user: user._id, type: "refresh" })
     // send response
-    return res.status(201).json({ success: true, message: "User logged in successfully", accessToken, refreshToken })
+    return res.status(200).json({ success: true, message: "User logged in successfully", accessToken, refreshToken })
 
 }
 
@@ -191,11 +191,11 @@ export const resetPassword = async (req, res) => {
     }
     // check otp 
     if (user.otp != otp) {
-        throw new Error("Invalid OTP", { cause: 400 })
+        throw new Error("Invalid OTP", { cause: 403 })
     }
     // check otp expiration
     if (user.otpExpire < Date.now()) {
-        throw new Error("Expired OTP", { cause: 400 })
+        throw new Error("Expired OTP", { cause: 403 })
     }
     // update user 
     user.password = await hashPassword(newPassword)
@@ -208,7 +208,7 @@ export const resetPassword = async (req, res) => {
     // destroy all refresh tokens in DB
     await Token.deleteMany({ user: user._id, type: "refresh" })
     // send response
-    return res.status(201).json({ success: true, message: "reset password successfully" })
+    return res.status(200).json({ success: true, message: "reset password successfully" })
 }
 
 // user logout
@@ -220,5 +220,5 @@ export const logout = async (req, res) => {
     // store token into DB
     await Token.create({ token, user: user._id })
     // send response
-    return res.status(201).json({ success: true, message: "User logged out successfully" })
+    return res.status(200).json({ success: true, message: "User logged out successfully" })
 }

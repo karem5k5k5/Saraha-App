@@ -13,7 +13,7 @@ export const authUser = async (req, res, next) => {
     // check token into DB
     const blockedToken = await Token.findOne({ token, type: "access" })
     if (blockedToken) {
-        throw new Error("Invalid Token", { cause: 401 })
+        throw new Error("Invalid Token", { cause: 403 })
     }
     // check user existence
     const user = await User.findById(id)
@@ -22,7 +22,7 @@ export const authUser = async (req, res, next) => {
     }
     // check token expiration
     if (new Date(iat * 1000) < user.credentialsUpdatedAt) {
-        throw new Error("Expired Token", { cause: 401 })
+        throw new Error("Expired Token", { cause: 403 })
     }
     // add user to req body
     req.user = user
